@@ -3,15 +3,34 @@ title: "R Notebook"
 output: html_notebook
 ---
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
 
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
 
 ```{r}
-plot(cars)
+library(tidyverse)
+library(ggthemes)
+data <- read.csv("output.csv")
+theme_bw <- function (base_size = 12, base_family = "sans") 
+{
+    (theme_foundation(base_size = base_size, base_family = base_family) + 
+        theme(
+            line = element_line(colour = "black"), rect = element_rect(fill = ggthemes_data$fivethirtyeight["ltgray"], 
+            linetype = 0, colour = NA), text = element_text(colour = ggthemes_data$fivethirtyeight["dkgray"]), 
+            axis.title = element_text(family="Courier" , colour = ggthemes_data$fivethirtyeight["dkgray"] ),
+            axis.title.x = element_text(family="Courier" , colour = ggthemes_data$fivethirtyeight["dkgray"] ) , 
+            axis.title.y = element_text(vjust= 2 ,family="Courier" , colour = ggthemes_data$fivethirtyeight["dkgray"] ),            
+            axis.ticks = element_blank(), axis.line = element_blank(), 
+            legend.background = element_rect(), legend.position = "bottom", 
+            legend.direction = "horizontal", legend.box = "vertical", 
+            panel.grid = element_line(colour = NULL), panel.grid.major = element_line(colour = ggthemes_data$fivethirtyeight["medgray"]), 
+            panel.grid.minor = element_line(colour = ggthemes_data$fivethirtyeight["medgray"], size = 0.25),
+            plot.title = element_text(family="Courier", size=14)
+            )
+     )
+}
 ```
 
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+```{r}
+data %>% group_by(Category) %>% summarise(n = sum(Price)) %>% ggplot() + geom_bar(aes(x=Category, y=n),stat = "identity" , fill = ggthemes_data$fivethirtyeight['blue']) + theme_bw() + labs(title = "My Total Grocery Cost") + ylab("Total Cost, $") + xlab('')
+```
 
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file).
 
